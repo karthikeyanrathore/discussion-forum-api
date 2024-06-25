@@ -1,6 +1,6 @@
 
 from flask import Flask, jsonify, g
-from apps.views import auth_bp
+from apps.views import user_bp, discuss_bp
 from apps.database import db
 import os
 import flask
@@ -63,8 +63,12 @@ def create_app():
         print("Ok - [LOG] creating tables...")
         db.create_all()
     
+    prefix = "/api"
     app.register_blueprint(
-        auth_bp, url_prefix=f"/api",
+        user_bp, url_prefix=prefix,
+    )
+    app.register_blueprint(
+        discuss_bp, url_prefix=prefix,
     )
 
 

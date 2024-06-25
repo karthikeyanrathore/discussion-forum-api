@@ -23,14 +23,15 @@ class User(db.Model):
     updated_at = Column(db.DateTime, server_default=db.func.now(), onupdate=db.func.now())
 
     # one-to-many
-    discussion_post = relationship(
+    discussion_posts = relationship(
         "DiscussionPost",
-        back_populates="users",
+        back_populates="users_d", # name of relationship defined in another model.
         cascade="all, delete-orphan",
         passive_deletes=True,
         lazy=True,
         foreign_keys="DiscussionPost.user_id",
     )
+    # TODO: add followers, followee
 
     def serialize(self):
         pass
@@ -54,7 +55,7 @@ class DiscussionPost(db.Model):
     created_at = Column(db.DateTime, server_default=db.func.now())
     updated_at = Column(db.DateTime, server_default=db.func.now(), onupdate=db.func.now())
 
-    user_data = relationship(
+    users_d = relationship(
         "User",
         back_populates="discussion_posts",
         foreign_keys=[user_id],
@@ -99,7 +100,7 @@ class Tag(db.Model):
     discussion_posts = relationship(
         "DiscussionPost",
         secondary="discussion_tags",
-        back_populates="tag"
+        back_populates="tags"
     )
 
 
@@ -122,6 +123,7 @@ class Like(db.Model):
     id = Column(Integer, primary_key=True, autoincrement=True)
     user_id = Column(Integer, ForeignKey('users.id', ondelete="CASCADE"), nullable=False)
     discussion_id = Column(Integer, ForeignKey('discussion_posts.id', ondelete="CASCADE"), nullable=False)
+    discussion_posts = relationship("DiscussionPost", back_populates="likes")
 
 
 class Comment(db.Model):
@@ -133,6 +135,8 @@ class Comment(db.Model):
     user_id = Column(Integer, ForeignKey('users.id', ondelete="CASCADE"), nullable=False)
     content = Column(Text, nullable=False)
     discussion_id = Column(Integer, ForeignKey('discussion_posts.id', ondelete="CASCADE"), nullable=False)
+    discussion_posts = relationship("DiscussionPost", back_populates="comments")
+
     created_at = Column(db.DateTime, server_default=db.func.now())
     updated_at = Column(db.DateTime, server_default=db.func.now(), onupdate=db.func.now())
 
@@ -143,7 +147,7 @@ class Comment(db.Model):
         cascade="all, delete-orphan",
         passive_deletes=True,
         lazy=True,
-        foreign_keys="Reply.discussion_id",
+        foreign_keys="Reply.comment_id", # id defined in another model.
     )
 
 
@@ -157,7 +161,7 @@ class Reply(db.Model):
     discussion_id = Column(Integer, ForeignKey('discussion_posts.id', ondelete="CASCADE"), nullable=False)
     content = Column(Text, nullable=False)
     comment_id = Column(Integer, ForeignKey('comments.id', ondelete="CASCADE"), nullable=False)
-
+    comments = relationship("Comment", back_populates="replies")
 
 
 class Follow(db.Model):
@@ -173,3 +177,4 @@ class Follow(db.Model):
 
 
 # How CASCADE works in the case of many-to-many relationship?
+# back_populates works in vice-versa way

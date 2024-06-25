@@ -51,12 +51,9 @@ class RegisterUser(Resource):
         if g.db.session.query(models.User).filter_by(username=username).one_or_none():
             return response(403, "Username already exists. Please help to choose different username.")
         try:
-            user_d = models.User(
-                username=json_data["username"],
-                password_hash=json_data["password"], # TODO: use hashing lib
-                email_id=json_data["email_id"],
-                mobile_number=json_data["mobile_number"],
-            )
+            json_data["password_hash"] = json_data["password"]
+            del json_data["password"]
+            user_d = models.User(**json_data)
         except KeyError as e:
             return response(401, f"missing field.: {e}")
         try:
@@ -78,17 +75,68 @@ class LoginUser(Resource):
 
 
 
-class Discussion(Resource):
-    def post(self):
+class ShowUsers(Resource):
+    def get(self):
+        pass
+
+
+class UsersDetails(Resource):
+    def delete(self, user_id):
+        pass
+
+    def update(self, user_id):
+        pass
+
+
+class FollowUser(Resource):
+    def post(self, user_id):
         pass
 
 
 
+## 
 
-  
+class Discussions(Resource):
+    def post(self):
+        payload = ""
+        if "multipart/form-data" in request.content_type:
+            payload = request.form.to_dict()
+        else:
+            return response(404, "Please help to provide multipart inputs")
+
+        image_file = request.files.get("image_file", None)
+        if image_file:
+            bytes_image = (image_file.read())
+        
+        # get user_id from JWT token
+        return "Ok"
+
     
-    # def update(self):
-    #     pass
+    def get(self):
+        pass
+
+
+
+class DiscussionPost(Resource):
+    def get(self, discuss_id):
+        pass
     
+
+    def update(self, discuss_id):
+        pass
+
     
-    # def delete()
+    def delete(self, discuss_id):
+        pass
+
+
+
+class CommentPost(Resource):
+    def post(self, discuss_id):
+        pass
+
+
+
+class LikePost(Resource):
+    def post(self, discuss_id):
+        pass
