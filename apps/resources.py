@@ -37,9 +37,9 @@ def is_token_valid(func):
         return func(*args, **kwargs)
     return wrapper
 
-def get_username_from_token():
+def get_userid_from_token():
     accesstoken = request.headers.get("Authorization")[7:]
-    return jwt.decode(accesstoken, JWT_SECRET_KEY, algorithms=["HS256"])["username"]
+    return jwt.decode(accesstoken, JWT_SECRET_KEY, algorithms=["HS256"])["user_id"]
 
 
 class RegisterUser(Resource):
@@ -71,8 +71,26 @@ class RegisterUser(Resource):
 
 class LoginUser(Resource):
     def post(self):
-        pass
-
+        json_data = request.get_json()
+        if not json_data:
+            return response(404, "Please help to provide JSON inputs")
+        username = json_data["username"]
+        password = json_data["password"]
+        user_session = g.db.session.query(models.User).filter_by(username=username).one_or_none()
+        if not user_session:
+            return response(401, "Username does not exists. Please first signup.")
+        if user_session.password_hash != password:
+            return response(401, "Incorrect password.")
+        jwt_dict = {
+            "user_id": user_session.id,
+            "username": username,
+            "exp": datetime.now(tz=timezone.utc) + timedelta(hours=8)
+        }
+        access_token = jwt.encode(jwt_dict, JWT_SECRET_KEY, algorithm="HS256")
+        ret = user_session.serialize()
+        ret["access_token"]=  access_token
+        print(ret)
+        return response(200, ret)
 
 
 class ShowUsers(Resource):
@@ -97,6 +115,7 @@ class FollowUser(Resource):
 ## 
 
 class Discussions(Resource):
+    @is_token_valid
     def post(self):
         payload = ""
         if "multipart/form-data" in request.content_type:
@@ -107,9 +126,36 @@ class Discussions(Resource):
         image_file = request.files.get("image_file", None)
         if image_file:
             bytes_image = (image_file.read())
-        
-        # get user_id from JWT token
-        return "Ok"
+        userid_session = get_userid_from_token()
+        model_payload = {}
+        model_payload["user_id"] = int(userid_session)
+        model_payload["text_content"] = payload.get("text_content")
+        model_payload["image_data"] = bytes_image if image_file else None
+
+        try:
+            discussion_session = models.DiscussionPost(**model_payload)
+            g.db.session.add(discussion_session)
+            g.db.session.commit()
+        except sqlalchemy.exc.IntegrityError:
+            return response(401, "please provide text content. check logs!")
+
+        if payload.get("tags"):
+            tags = payload.get("tags").split(",")
+            for tag in tags:
+                tag_exists = g.db.session.query(models.Tag).filter_by(
+                    title=tag.strip()
+                ).one_or_none()
+                if not tag_exists:
+                    # g.db.session.add(tag_exists)
+                    tag_m = models.Tag(title=tag.strip())
+                    g.db.session.add(tag_m)
+                    g.db.session.commit()
+                    discussion_session.tags.append(tag_m)
+                else:
+                    discussion_session.tags.append(tag_exists)
+            g.db.session.commit()
+        r_serialize = discussion_session.serialize()
+        return (discussion_session.serialize())
 
     
     def get(self):

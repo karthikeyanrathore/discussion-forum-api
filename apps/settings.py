@@ -11,5 +11,5 @@ SQLALCHEMY_DATABASE_URI = sqlalchemy.engine.url.URL.create(
     port="5432",
     database="postgres",
 )
-
-JWT_SECRET_KEY = os.environ.get("JWT_SECRET_KEY", None)
+# TODO: remove rubbish
+JWT_SECRET_KEY = os.environ.get("JWT_SECRET_KEY", "asdkasvdkvaskdg")

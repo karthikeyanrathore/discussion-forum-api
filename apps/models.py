@@ -34,7 +34,14 @@ class User(db.Model):
     # TODO: add followers, followee
 
     def serialize(self):
-        pass
+        out = {}
+        out["id"] = self.id
+        out["username"] = self.username
+        out["email_id"] = self.email_id
+        out["mobile_number"] = self.mobile_number
+        out["created_at"] = self.created_at
+        out["updated_at"] = self.updated_at
+        return out
 
 
 
@@ -86,8 +93,18 @@ class DiscussionPost(db.Model):
     )
 
     def serialize(self):
-        pass
-
+        out = {}
+        out["id"] = self.id
+        out["user_id"] = self.user_id
+        out["text_content"] = self.text_content
+        out["created_at"] = self.created_at.strftime("%d/%m/%Y %H:%M:%S")
+        out["updated_at"] = self.updated_at.strftime("%d/%m/%Y %H:%M:%S")
+        if self.tags:
+            post_tags = []
+            for tag in self.tags:
+                post_tags.append({"id": tag.id, "title": tag.title})
+            out["tags"] = post_tags
+        return out
 
 class Tag(db.Model):
     
