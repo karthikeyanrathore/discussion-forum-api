@@ -1,5 +1,5 @@
 from sqlalchemy import Column, Integer, String, ForeignKey, PrimaryKeyConstraint, Index
-from sqlalchemy import Text, LargeBinary
+from sqlalchemy import Text, LargeBinary, UniqueConstraint
 from sqlalchemy.orm import declarative_base, relationship
 from sqlalchemy.dialects.postgresql import TSVECTOR
 from sqlalchemy.sql import func
@@ -104,6 +104,13 @@ class DiscussionPost(db.Model):
             for tag in self.tags:
                 post_tags.append({"id": tag.id, "title": tag.title})
             out["tags"] = post_tags
+        if self.comments:
+            com = []
+            for comment in self.comments:
+                com.append(comment.content)
+            out["comments"] = com
+        if self.likes:
+            out["likes"] = len(self.likes)
         return out
 
 class Tag(db.Model):
@@ -140,6 +147,8 @@ class Like(db.Model):
     id = Column(Integer, primary_key=True, autoincrement=True)
     user_id = Column(Integer, ForeignKey('users.id', ondelete="CASCADE"), nullable=False)
     discussion_id = Column(Integer, ForeignKey('discussion_posts.id', ondelete="CASCADE"), nullable=False)
+    # so that same user does not like the post > 1 time.
+    UniqueConstraint(user_id, discussion_id)
     discussion_posts = relationship("DiscussionPost", back_populates="likes")
 
 

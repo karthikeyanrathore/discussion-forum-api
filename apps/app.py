@@ -54,6 +54,8 @@ def create_app():
     # TODO: Understand how to integrate flask-sqlalchemy with uWSGI workers.
     # Adding NullPool for now.
     app.config["SQLALCHEMY_ENGINE_OPTIONS"] = {"poolclass": NullPool}
+    app.config['PROPAGATE_EXCEPTIONS'] = True
+
     # app.config["SQLALCHEMY_ECHO"] = True
     db.init_app(app)
     # cors enabled for frontend.
@@ -75,6 +77,11 @@ def create_app():
     @app.errorhandler(404)
     def resource_not_found(e):  
         return flask.make_response(jsonify(error=str(e)), 404)
+
+    @app.errorhandler(AssertionError)
+    def handle_assertion(e):
+        return flask.make_response(jsonify(error=str(e)), 404)
+    
 
     @app.before_request
     def flaskg_db():

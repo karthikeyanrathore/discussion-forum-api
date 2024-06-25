@@ -165,8 +165,11 @@ class Discussions(Resource):
 
 class DiscussionPost(Resource):
     def get(self, discuss_id):
-        pass
-    
+        post_exists = g.db.session.query(models.DiscussionPost).filter_by(
+            id=discuss_id
+        ).one_or_none()
+        assert post_exists != None, "post does not exists"
+        return post_exists.serialize()
 
     def update(self, discuss_id):
         pass
@@ -178,11 +181,41 @@ class DiscussionPost(Resource):
 
 
 class CommentPost(Resource):
+    @is_token_valid
     def post(self, discuss_id):
-        pass
-
+        json_data = request.get_json()
+        if not json_data:
+            return response(404, "Please help to provide JSON inputs")
+        # verify discuss_id
+        post_exists = g.db.session.query(models.DiscussionPost).filter_by(
+            id=discuss_id
+        ).one_or_none()
+        assert post_exists != None, "post does not exists"
+        model_payload = {}
+        model_payload["content"] = json_data["content"]
+        model_payload["user_id"] = get_userid_from_token()
+        model_payload["discussion_id"] = discuss_id
+        comment_session = models.Comment(**model_payload)
+        g.db.session.add(comment_session)
+        g.db.session.commit()
+        return {"message": "added comment!"}
 
 
 class LikePost(Resource):
     def post(self, discuss_id):
-        pass
+        # verify discuss_id
+        post_exists = g.db.session.query(models.DiscussionPost).filter_by(
+            id=discuss_id
+        ).one_or_none()
+        assert post_exists != None, "post does not exists"
+        model_payload = {}
+        model_payload["user_id"] = get_userid_from_token()
+        model_payload["discussion_id"] = discuss_id
+        try:
+            like_session = models.Like(**model_payload)
+            g.db.session.add(like_session)
+            g.db.session.commit()
+        except sqlalchemy.exc.IntegrityError as e:
+            print(f"debug error: {e}")
+            return {"message": "user already liked the post."}
+        return {"message": "added like!"}
