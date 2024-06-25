@@ -107,7 +107,11 @@ class DiscussionPost(db.Model):
         if self.comments:
             com = []
             for comment in self.comments:
-                com.append(comment.content)
+                replies = []
+                if comment.replies:
+                    for reply in comment.replies:
+                        replies.append(reply.content)
+                com.append(f"{comment.content}: {replies}")
             out["comments"] = com
         if self.likes:
             out["likes"] = len(self.likes)
@@ -199,7 +203,7 @@ class Follow(db.Model):
     follower_id  = Column(Integer, ForeignKey('users.id', ondelete="CASCADE"), nullable=False)
     # person who is followed by follower :D
     followee_id = Column(Integer, ForeignKey('users.id', ondelete="CASCADE"), nullable=False)
-
+    UniqueConstraint(follower_id, followee_id)
 
 
 # How CASCADE works in the case of many-to-many relationship?

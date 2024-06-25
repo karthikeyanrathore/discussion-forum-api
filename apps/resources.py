@@ -107,12 +107,26 @@ class UsersDetails(Resource):
 
 
 class FollowUser(Resource):
+    @is_token_valid
     def post(self, user_id):
-        pass
+        followee_exists = g.db.session.query(models.User).filter_by(
+            id=user_id
+        ).one_or_none()
+        assert followee_exists != None, "Followee does not exists."
+        curr_userid_session = get_userid_from_token()
+        model_payload = {}
+        model_payload["follower_id"] = curr_userid_session
+        model_payload["followee_id"] = followee_exists.id
+        assert curr_userid_session != followee_exists.id, "you can't follow yourself lol :D"
+        try:
+            follow_q = models.Follow(**model_payload)
+            g.db.session.add(follow_q)
+            g.db.session.commit()
+        except sqlalchemy.exc.IntegrityError as e:
+            print(f"debug error: {e}")
+            return {"message": "you already follow this person."}
+        return {"message": f"user id: {curr_userid_session} follows user id:{followee_exists.id}"}
 
-
-
-## 
 
 class Discussions(Resource):
     @is_token_valid
@@ -202,6 +216,7 @@ class CommentPost(Resource):
 
 
 class LikePost(Resource):
+    @is_token_valid
     def post(self, discuss_id):
         # verify discuss_id
         post_exists = g.db.session.query(models.DiscussionPost).filter_by(
@@ -219,3 +234,26 @@ class LikePost(Resource):
             print(f"debug error: {e}")
             return {"message": "user already liked the post."}
         return {"message": "added like!"}
+
+
+class ReplyComment(Resource):
+    # it does not support nested replies like reddit conv.
+    @is_token_valid
+    def post(self, comment_id):
+        json_data = request.get_json()
+        if not json_data:
+            return response(404, "Please help to provide JSON inputs")
+        comment_exists = g.db.session.query(models.Comment).filter_by(
+            id=comment_id
+        ).one_or_none()
+        assert comment_exists != None, "comment does not exists!"
+        model_payload = {}
+        model_payload["content"] = json_data["content"]
+        model_payload["comment_id"] = comment_id
+        model_payload["user_id"] = get_userid_from_token()
+        model_payload["discussion_id"] = comment_exists.discussion_id
+        # print(comment_exists.discussion_id)
+        reply_m = models.Reply(**model_payload)
+        g.db.session.add(reply_m)
+        g.db.session.commit()
+        return {"message": "added reply to comment."}

@@ -7,7 +7,8 @@ from apps.resources import (
     Discussions,
     DiscussionPost,
     CommentPost,
-    LikePost
+    LikePost,
+    ReplyComment
 )
 
 from flask import Blueprint
@@ -31,13 +32,4 @@ discuss_api.add_resource(Discussions, "/discussions")
 discuss_api.add_resource(DiscussionPost, "/discussion/<int:discuss_id>")
 discuss_api.add_resource(CommentPost, "/discussion/<int:discuss_id>/comment")
 discuss_api.add_resource(LikePost, "/discussion/<int:discuss_id>/like")
-
-# doubtful ?? 
-# discuss_api.add_resource(ReplyComment, "/discussion/<int:comment_id>/reply")
-
-
-
-
-
-
-
+discuss_api.add_resource(ReplyComment, "/comment/<int:comment_id>/reply")
