@@ -30,3 +30,6 @@ CMD sh ./wait-for.sh discuss-forum-db:5432 -- echo "postgres is up!" && \
     . ./docker_env.sh && uwsgi --ini /uwsgi.ini
 
 
+
+
+

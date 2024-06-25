@@ -1,7 +1,9 @@
 import sqlalchemy
 import os
 
-POSTGRES_DB_HOST = os.environ.get("POSTGRES_DB_HOST", "172.30.0.2")
+# when testing
+# POSTGRES_DB_HOST = os.environ.get("POSTGRES_DB_HOST", "172.30.0.2")
+POSTGRES_DB_HOST = os.environ.get("POSTGRES_DB_HOST", None)
 
 SQLALCHEMY_DATABASE_URI = sqlalchemy.engine.url.URL.create(
     drivername="postgresql",
@@ -12,4 +14,4 @@ SQLALCHEMY_DATABASE_URI = sqlalchemy.engine.url.URL.create(
     database="postgres",
 )
 # TODO: remove rubbish
-JWT_SECRET_KEY = os.environ.get("JWT_SECRET_KEY", "asdkasvdkvaskdg")
+JWT_SECRET_KEY = os.environ.get("JWT_SECRET_KEY", None)
