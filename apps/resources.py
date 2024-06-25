@@ -95,16 +95,49 @@ class LoginUser(Resource):
 
 class ShowUsers(Resource):
     def get(self):
-        pass
+        ret = []
+        users_m = g.db.session.query(models.User).all()
+        for user in users_m:
+            ret.append(user.serialize())
+        return ret
 
 
 class UsersDetails(Resource):
     def delete(self, user_id):
-        pass
+        is_user = g.db.session.query(models.User).filter_by(
+            id=user_id
+        ).one_or_none()
+        assert is_user != None, "user does not exists!"
+        # First delete all the discussion posts
+        # then the user. check why cascade is not working here.
+        for post in is_user.discussion_posts:
+            g.db.session.delete(post)
+            g.db.session.commit()
+        g.db.session.delete(is_user)
+        g.db.session.commit()
+        return {"message": "user deleted!"}
 
-    def update(self, user_id):
-        pass
-
+    def put(self, user_id):
+        json_data = request.get_json()
+        if not json_data:
+            return response(404, "Please help to provide JSON inputs")
+        is_user = g.db.session.query(models.User).filter_by(
+            id=user_id
+        ).one_or_none()
+        assert is_user != None, "user does not exists!"
+        if json_data.get("username", None):
+            is_user.username = json_data["username"]            
+        if json_data.get("email_id", None):
+            is_user.email_id = json_data["email_id"]
+        if json_data.get("mobile_number", None):
+            is_user.mobile_number = json_data["mobile_number"]
+        if json_data.get("password", None):
+            is_user.password_hash = json_data["password"]
+        try:
+            g.db.session.commit()
+        except sqlalchemy.exc.IntegrityError:
+            return response(404, "UniqueViolation error!")
+        return {"message": "updated!"}
 
 class FollowUser(Resource):
     @is_token_valid
@@ -173,9 +206,21 @@ class Discussions(Resource):
 
     
     def get(self):
-        pass
-
-
+        # search post by tags
+        r_tag = request.args.get("tag", None)
+        if not r_tag:
+            out = []
+            for post in g.db.session.query(models.DiscussionPost).all():
+                out.append(post.serialize())
+            return out
+        discussions = g.db.session.query(models.DiscussionPost).join(
+            models.DiscussionPost.tags
+        ).filter(models.Tag.title == r_tag).all()
+        out = []
+        for dp in discussions:
+            out.append(dp.serialize())
+        return out
+        
 
 class DiscussionPost(Resource):
     def get(self, discuss_id):
@@ -185,7 +230,7 @@ class DiscussionPost(Resource):
         assert post_exists != None, "post does not exists"
         return post_exists.serialize()
 
-    def update(self, discuss_id):
+    def put(self, discuss_id):
         pass
 
     

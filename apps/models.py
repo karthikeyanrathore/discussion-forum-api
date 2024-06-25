@@ -39,8 +39,8 @@ class User(db.Model):
         out["username"] = self.username
         out["email_id"] = self.email_id
         out["mobile_number"] = self.mobile_number
-        out["created_at"] = self.created_at
-        out["updated_at"] = self.updated_at
+        out["created_at"] = self.created_at.strftime("%d/%m/%Y %H:%M:%S")
+        out["updated_at"] = self.updated_at.strftime("%d/%m/%Y %H:%M:%S")
         return out
 
 
