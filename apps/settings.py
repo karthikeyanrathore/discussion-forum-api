@@ -14,4 +14,7 @@ SQLALCHEMY_DATABASE_URI = sqlalchemy.engine.url.URL.create(
     database="postgres",
 )
 # TODO: remove rubbish
-JWT_SECRET_KEY = os.environ.get("JWT_SECRET_KEY", None)
+if bool(int(os.environ.get("TESTING"))):
+    JWT_SECRET_KEY = "secret1415@!kalm"
+else:
+    JWT_SECRET_KEY = os.environ.get("JWT_SECRET_KEY", None)

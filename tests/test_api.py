@@ -2,8 +2,7 @@ import pytest
 import requests
 import urllib3
 
-HOST_ADDRESS = "http://0.0.0.0:80"
-
+from conftest import HOST_ADDRESS
 
 def test_post_discussion(jwt_client_token):
     headers = {}
@@ -49,7 +48,7 @@ def test_post_discussion(jwt_client_token):
     mlp_payload = {
         "heading": "update 2! &&&kkk",
         "text_content": "postgres database crashed $$$$$ )()()()()(11!!!6^^^^^~~~~~~```)",
-        "image_file": (image_path, image_path)
+        "image_file": (image_path, image_path) # optional
     }
     body, content_type = urllib3.encode_multipart_formdata(mlp_payload)
     headers["Content-Type"] = content_type
@@ -62,7 +61,7 @@ def test_post_discussion(jwt_client_token):
     image_path = "testfiles/F64YVYAW8AAEWO5.jpeg"
     mlp_payload = {
         "heading": "update 2! &&&kkk",
-        "image_file": (image_path, image_path)
+        "image_file": (image_path, image_path) # optional
     }
     body, content_type = urllib3.encode_multipart_formdata(mlp_payload)
     headers["Content-Type"] = content_type
@@ -71,3 +70,17 @@ def test_post_discussion(jwt_client_token):
     assert ret.status_code == 401
 
     
+    # with tags
+    image_path = "testfiles/F64YVYAW8AAEWO5.jpeg"
+    mlp_payload = {
+        "heading": "update 2! &&&kkk",
+        "text_content": "postgres database crashed $$$$$ )()()()()(11!!!6^^^^^~~~~~~```)",
+        "image_file": (image_path, image_path), # optional
+        "tags": "cs, viral   , redis, cat  " # optional
+    }
+    body, content_type = urllib3.encode_multipart_formdata(mlp_payload)
+    headers["Content-Type"] = content_type
+    ret = requests.post(f"{HOST_ADDRESS}/backend/api/discussions",data=body, headers=headers)
+    assert ret.status_code == 200
+    assert ret.json()["image_present"] == True
+    assert len(ret.json()["tags"]) == 4 

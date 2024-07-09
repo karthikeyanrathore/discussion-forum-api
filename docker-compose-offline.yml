@@ -18,8 +18,8 @@ services:
       - discuss-forum-db_data:/var/lib/postgresql/data/
     networks:
       - discuss-forum-net
-    # ports:
-    #   - "5432:5432"
+    ports:
+      - "5432:5432"
   
   discuss-forum-api:
     hostname: discuss-forum-api
@@ -29,6 +29,7 @@ services:
     environment:
       # - JWT_SECRET_KEY=jta99001
       - POSTGRES_DB_HOST=discuss-forum-db
+      - TESTING=1
     depends_on:
       - discuss-forum-db
     # https://docs.docker.com/config/containers/start-containers-automatically/#use-a-restart-policy

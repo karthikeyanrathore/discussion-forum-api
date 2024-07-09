@@ -57,6 +57,7 @@ class DiscussionPost(db.Model):
         nullable=False,
         comment="foreign key to User ID",
     )
+    heading = Column(String, nullable=False)
     text_content = Column(Text, nullable=False)
     image_data = Column(LargeBinary, nullable=True)
     created_at = Column(db.DateTime, server_default=db.func.now())
@@ -96,9 +97,11 @@ class DiscussionPost(db.Model):
         out = {}
         out["id"] = self.id
         out["user_id"] = self.user_id
+        out["heading"] = self.heading
         out["text_content"] = self.text_content
         out["created_at"] = self.created_at.strftime("%d/%m/%Y %H:%M:%S")
         out["updated_at"] = self.updated_at.strftime("%d/%m/%Y %H:%M:%S")
+        out["image_present"] = True if self.image_data else False
         if self.tags:
             post_tags = []
             for tag in self.tags:

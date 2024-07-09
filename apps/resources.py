@@ -89,7 +89,6 @@ class LoginUser(Resource):
         access_token = jwt.encode(jwt_dict, JWT_SECRET_KEY, algorithm="HS256")
         ret = user_session.serialize()
         ret["access_token"]=  access_token
-        print(ret)
         return response(200, ret)
 
 
@@ -109,7 +108,7 @@ class UsersDetails(Resource):
         ).one_or_none()
         assert is_user != None, "user does not exists!"
         # First delete all the discussion posts
-        # then the user. check why cascade is not working here.
+        # then the user.
         for post in is_user.discussion_posts:
             g.db.session.delete(post)
             g.db.session.commit()
@@ -169,13 +168,13 @@ class Discussions(Resource):
             payload = request.form.to_dict()
         else:
             return response(404, "Please help to provide multipart inputs")
-
         image_file = request.files.get("image_file", None)
         if image_file:
             bytes_image = (image_file.read())
         userid_session = get_userid_from_token()
         model_payload = {}
         model_payload["user_id"] = int(userid_session)
+        model_payload["heading"] = payload.get("heading")
         model_payload["text_content"] = payload.get("text_content")
         model_payload["image_data"] = bytes_image if image_file else None
 
