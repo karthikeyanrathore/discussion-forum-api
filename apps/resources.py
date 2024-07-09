@@ -256,7 +256,8 @@ class CommentPost(Resource):
         comment_session = models.Comment(**model_payload)
         g.db.session.add(comment_session)
         g.db.session.commit()
-        return {"message": "added comment!"}
+        comment = g.db.session.query(models.Comment).order_by(models.Comment.id.desc()).first()
+        return comment.serialize()
 
 
 class LikePost(Resource):

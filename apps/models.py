@@ -182,6 +182,17 @@ class Comment(db.Model):
         lazy=True,
         foreign_keys="Reply.comment_id", # id defined in another model.
     )
+    def serialize(self):
+        out = {}
+        out["id"] = self.id
+        out["user_id"] = self.user_id # author
+        out["content"] = self.content
+        out["discussion_id"] = self.discussion_id
+        re = []
+        for reply in self.replies:
+            re.append({"id": reply.id, "content": reply.content})
+        out["replies"] = re
+        return out
 
 
 class Reply(db.Model):
