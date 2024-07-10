@@ -102,6 +102,7 @@ class ShowUsers(Resource):
 
 
 class UsersDetails(Resource):
+    @is_token_valid
     def delete(self, user_id):
         is_user = g.db.session.query(models.User).filter_by(
             id=user_id
@@ -116,6 +117,7 @@ class UsersDetails(Resource):
         g.db.session.commit()
         return {"message": "user deleted!"}
 
+    @is_token_valid
     def put(self, user_id):
         json_data = request.get_json()
         if not json_data:
@@ -229,13 +231,39 @@ class DiscussionPost(Resource):
         assert post_exists != None, "post does not exists"
         return post_exists.serialize()
 
+    @is_token_valid
     def put(self, discuss_id):
-        pass
+        post_exists = g.db.session.query(models.DiscussionPost).filter_by(
+            id=discuss_id
+        ).one_or_none()
+        assert post_exists != None, "post does not exists"
+        payload = ""
+        if "multipart/form-data" in request.content_type:
+            payload = request.form.to_dict()
+        else:
+            return response(404, "Please help to provide multipart inputs")
+        if payload.get("heading", None):
+            post_exists.heading = payload["heading"]
+        if payload.get("text_content", None):
+            post_exists.text_content =  payload["text_content"]
+        image_file = request.files.get("image_file", None)
+        if image_file:
+             post_exists.image_data =  (image_file.read())
+        try:
+            g.db.session.commit()
+        except sqlalchemy.exc.IntegrityError:
+            return response(404, "UniqueViolation error!")
+        return {"message": "post updated!"}
 
-    
+    @is_token_valid
     def delete(self, discuss_id):
-        pass
-
+        post_exists = g.db.session.query(models.DiscussionPost).filter_by(
+            id=discuss_id
+        ).one_or_none()
+        assert post_exists != None, "post does not exists"
+        g.db.session.delete(post_exists)
+        g.db.session.commit()
+        return {"message": "post deleted."}
 
 
 class CommentPost(Resource):
