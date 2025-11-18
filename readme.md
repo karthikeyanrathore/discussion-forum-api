@@ -1,4 +1,6 @@
-## discussion forum
+# discussion forum
+A RESTful backend service that powers community discussions through structured posts, replies, and moderation tools. Designed for fast performance and seamless plug-and-play use.
+
 
 ## UML
 ![image info](./static/dbdiagram_UML.png)
