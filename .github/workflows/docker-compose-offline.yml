@@ -1,0 +1,50 @@
+name: Docker Compose Offline
+
+on:
+  push:
+    branches: ["**"]
+  pull_request:
+    branches: ["**"]
+
+jobs:
+  docker-compose-check:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Build and start services
+        run: docker compose -f docker-compose-offline.yml up -d --build
+
+      - name: Wait for services to be healthy
+        run: |
+          SERVICES="discuss-forum-db discuss-forum-api nginx-performer"
+          TIMEOUT=120
+          for SERVICE in $SERVICES; do
+            echo "Waiting for $SERVICE to be running..."
+            ELAPSED=0
+            until [ -n "$(docker compose -f docker-compose-offline.yml ps --status running --quiet "$SERVICE")" ]; do
+              if [ "$ELAPSED" -ge "$TIMEOUT" ]; then
+                echo "$SERVICE did not become healthy within ${TIMEOUT}s"
+                docker compose -f docker-compose-offline.yml logs "$SERVICE"
+                exit 1
+              fi
+              sleep 5
+              ELAPSED=$((ELAPSED + 5))
+            done
+            echo "$SERVICE is running."
+          done
+
+      - name: Check running containers
+        run: docker compose -f docker-compose-offline.yml ps
+
+      - name: Show container logs on failure
+        if: failure()
+        run: docker compose -f docker-compose-offline.yml logs
+
+      - name: Tear down services
+        if: always()
+        run: docker compose -f docker-compose-offline.yml down -v --remove-orphans
