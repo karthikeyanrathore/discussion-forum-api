@@ -1,5 +1,4 @@
-# Discussion Forum API
-
+# threads
 ## Running Locally
 
 To launch the service locally, execute the following commands:
