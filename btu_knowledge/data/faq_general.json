@@ -1,0 +1,182 @@
+[
+  {
+    "section": "Admission Requirements and Procedures",
+    "question": "What are the admission requirements for the Artificial Intelligence study programme?",
+    "answer": "",
+    "source_url": "https://www.b-tu.de/en/artificial-intelligence-ms/faq",
+    "linked_urls": [],
+    "linked_content": ""
+  },
+  {
+    "section": "Questions about Admission Requirements",
+    "question": "What is the minimum GPA requirement for an admission to AI study programme?",
+    "answer": "There is no minimum GPA requirement in AI study programme.",
+    "source_url": "https://www.b-tu.de/en/artificial-intelligence-ms/faq",
+    "linked_urls": [],
+    "linked_content": ""
+  },
+  {
+    "section": "Questions about Admission Requirements",
+    "question": "How long does it take to get an admission decision?",
+    "answer": "Admission committee meeting takes place in regular interval (at least once a month) during the application period. Therefore, it takes minimum of 4-5 weeks from the day admission committee receiving the application documents to get an admission decision.",
+    "source_url": "https://www.b-tu.de/en/artificial-intelligence-ms/faq",
+    "linked_urls": [],
+    "linked_content": ""
+  },
+  {
+    "section": "Questions about Admission Requirements",
+    "question": "Will my work experience be taken into account in admission decision?",
+    "answer": "No. Unfortunately, work experience would not have any impact on admission decision.",
+    "source_url": "https://www.b-tu.de/en/artificial-intelligence-ms/faq",
+    "linked_urls": [],
+    "linked_content": ""
+  },
+  {
+    "section": "Questions about Admission Requirements",
+    "question": "Will online or offline certificate courses be taken into account for admission?",
+    "answer": "No, online or offline certificate courses will not be taken into account for admission decision.",
+    "source_url": "https://www.b-tu.de/en/artificial-intelligence-ms/faq",
+    "linked_urls": [],
+    "linked_content": ""
+  },
+  {
+    "section": "Questions about Admission Requirements",
+    "question": "I haven’t finished my bachelor’s degree yet. Can I apply regardless?",
+    "answer": "Yes, you can apply if you were in the final semester of bachelor given that you graduate before enrolling to BTU.",
+    "source_url": "https://www.b-tu.de/en/artificial-intelligence-ms/faq",
+    "linked_urls": [],
+    "linked_content": ""
+  },
+  {
+    "section": "Questions about the Degree Program",
+    "question": "Where can I find the exam and study regulations of the AI programme?",
+    "answer": "You can find the most recent Exam and Study Regulations on this website, under the tab Detail Information >> Regulations & Catalog of Modules",
+    "source_url": "https://www.b-tu.de/en/artificial-intelligence-ms/faq",
+    "linked_urls": [
+      "https://www.b-tu.de/en/artificial-intelligence-ms/detail-information/regulations-catalog-of-modules"
+    ],
+    "linked_content": ""
+  },
+  {
+    "section": "Questions about the Degree Program",
+    "question": "Where can I find information about Module (course) contents?",
+    "answer": "You can find information about the individual module contents on the Course Catalogues directory of the BTU by selecting Master’s in Artificial Intelligence study programme.",
+    "source_url": "https://www.b-tu.de/en/artificial-intelligence-ms/faq",
+    "linked_urls": [
+      "https://www.b-tu.de/qisserver3/rds?state=user&type=0&topitem=modules&noDBAction=y&init=y"
+    ],
+    "linked_content": ""
+  },
+  {
+    "section": "Questions about the Degree Program",
+    "question": "Is there a minimum or a maximum number of courses that one has to take or pass each semester to advance to the next semester?",
+    "answer": "No. Students decide on their own of how many Modules and the respective credits they take each semester. To finish your study within the regular 4 semesters, we would recommend to take 30 credits in each semester.",
+    "source_url": "https://www.b-tu.de/en/artificial-intelligence-ms/faq",
+    "linked_urls": [],
+    "linked_content": ""
+  },
+  {
+    "section": "Questions about the Degree Program",
+    "question": "Are there any compulsory (mandatory) modules in AI programme that everyone has to take?",
+    "answer": "Yes, internship module is compulsory (mandatory) for AI programme. Except internship, all other modules are free electives divided into three complexes: Advanced Methods; Knowledge Acquisition, Representation, and Processing; Learning and Reasoning.",
+    "source_url": "https://www.b-tu.de/en/artificial-intelligence-ms/faq",
+    "linked_urls": [],
+    "linked_content": ""
+  },
+  {
+    "section": "Questions about the Degree Program",
+    "question": "Information on the mandatory internship",
+    "answer": "The purpose of the internship is to apply and implement the spcialist and methodological knowledge acquired during the studies in practice. The students are responsible for finding suitable work placements for their internship. Potential suitable company for internship include companies that are active in the field of computer science, but also research institutes. The mandatory duration of internship is 260 hours in total. Once the internship is done, write a report of 3000-3500 words, get it approved and signed by the supervisor at the company, and finally submit it to the Artificial Intelligence Exam Board Head for awarding the credits. For more information, as always, please check << the Exam and Study Regulations >> of master in Artificial Intelligence.",
+    "source_url": "https://www.b-tu.de/en/artificial-intelligence-ms/faq",
+    "linked_urls": [],
+    "linked_content": ""
+  },
+  {
+    "section": "Questions about the Degree Program",
+    "question": "How many credits do I have to have from each elective complexes?",
+    "answer": "For each of the complexes, students have to have at least 6 credits. In case of Seminars or Laboratories, however, students choose between 6 and 12 credits.",
+    "source_url": "https://www.b-tu.de/en/artificial-intelligence-ms/faq",
+    "linked_urls": [],
+    "linked_content": ""
+  },
+  {
+    "section": "Questions about Module, Moodle, Registration and Deregistration",
+    "question": "Where can I find information on module registration and deregistration deadline?",
+    "answer": "You can find this information on the semester timetable, here .",
+    "source_url": "https://www.b-tu.de/en/artificial-intelligence-ms/faq",
+    "linked_urls": [
+      "https://www.b-tu.de/en/study/during-studies/study-organization/quicklinks/dates-and-deadlines"
+    ],
+    "linked_content": "Periods for lectures, examination registration and deregistration for modules, examinations"
+  },
+  {
+    "section": "Questions about Module, Moodle, Registration and Deregistration",
+    "question": "What is a Module? Where can I find information about registration and deregistration of Modules?",
+    "answer": "A module is a complete block with thematically defined outcome, given workload (credit points) and clear evaluation criteria. A module can consist of one or more courses and one or more examinations (credits and/or subject examinations). However, a typical module usually consists of a lecture, exercise sessions (übungs), and an exam. For information on registration and deregistration of modules, please check the Registrar’s Office website.",
+    "source_url": "https://www.b-tu.de/en/artificial-intelligence-ms/faq",
+    "linked_urls": [
+      "https://www.b-tu.de/en/study/during-studies/study-organization/examinations/registering-for-examinations"
+    ],
+    "linked_content": ""
+  },
+  {
+    "section": "Questions about Module, Moodle, Registration and Deregistration",
+    "question": "What is Moodle? How can I access Moodle?",
+    "answer": "Moodle is an e-learning management platform of BTU Cottbus-Senftenberg. You log in with the BTU Account. More information on the Moodle can be found here .",
+    "source_url": "https://www.b-tu.de/en/artificial-intelligence-ms/faq",
+    "linked_urls": [
+      "https://www.b-tu.de/elearning/btu/"
+    ],
+    "linked_content": ""
+  },
+  {
+    "section": "General Questions",
+    "question": "How can I enrol for the next semester?",
+    "answer": "Please check this website .",
+    "source_url": "https://www.b-tu.de/en/artificial-intelligence-ms/faq",
+    "linked_urls": [
+      "https://www.b-tu.de/en/study/during-studies/study-organization/formalities/registering-for-the-following-semester"
+    ],
+    "linked_content": ""
+  },
+  {
+    "section": "General Questions",
+    "question": "Where can I find different forms? (Study Plan, Mentor etc.)",
+    "answer": "Please check this website .",
+    "source_url": "https://www.b-tu.de/en/artificial-intelligence-ms/faq",
+    "linked_urls": [
+      "https://www.b-tu.de/en/institut-fuer-informatik/study/organization/forms"
+    ],
+    "linked_content": "General forms can be found on the corresponding Student Service web page . Information on confidentiality agreements in companies for graduation theses on the advice page on cooperation s on the BTU Intranet ."
+  },
+  {
+    "section": "General Questions",
+    "question": "I was sick and cannot attend the exam. What should I do now?",
+    "answer": "Please check this website .",
+    "source_url": "https://www.b-tu.de/en/artificial-intelligence-ms/faq",
+    "linked_urls": [
+      "https://www.b-tu.de/en/study/during-studies/study-organization/examinations/illness-and-incapability"
+    ],
+    "linked_content": "What does it mean to be incapable to take an examination? The most common cause of incapability is illness. Cases of “force majeure” can also be claimed. These are often the result of strikes (except for announced strikes), natural disasters, among others. The important point is that the cause of incapability is not one's own fault. Which medical certificate provides proof of an incapability to take an examination? This is set in the General Study Regulations and additional ordinances. As of the WS 2012/2013, the „ Medical Certificate on the Incapability to Take an Examination “ is to be used and needs to be promptly submitted in person or per mail in original (not scanned) to the registrar’s office within five working days after the scheduled examination date the incapability to take an examination. The medical certificate may not be issued any later than on the day of the examination. A medical sick note (yellow paper from the doctor) is not a valid medical certificate to prove incapability to take an examination . If in doubt or in case of recurrence the examination board may require a medical certificate from a public health officer. Certificates in foreign languages require an official translation. All costs arising from any of the above are not billable to the university. I had proof of being ill, but I still participated in an examination. If you have a medical certificate from a doctor and nonetheless participate in and complete an examination, you, by doing so, declare yourself capable of taking the examination. If you need to discontinue taking an examination due to abrupt occurrence of an illness, then you are required to notify the examiner and immediately visit a doctor who will issue you a medical certificate. If the medical certificate covers a time period of more than one day and you participate in an examination during this time period you, by doing so, declare yourself capable of taking the examination. The results of the examination shall be counted, regardless of the outcome. This applies as well if you are registered for two examinations on one day and only participate in one of them. If the medical certificate covers a time period of more than one day and you participate in an examination during this time period, then the medical certificate is no longer valid for the rest of the time period. What should I do if the examination takes place on a Saturday and I suddenly fall ill? In this case you should visit an on-call doctor and submit your medical certificate on the incapability to take an examination within 5 work days after determining the incapability to take an examination by e-mail to your responsible team . Why should I notify the university about my illness? Why may I not just not participate in the examination and thereby withdraw from the examination? A student who does not show up to an examination after registering for it and has not deregistered before the deadline or who leaves an examination before completing the examination will be awarded a failing grade of 5,0. This means that the examination will be recorded as not passed. I'm pregnant. What about studying? Congratulations on your pregnancy! According to the Maternity Protection Act (Mutterschutzgesetz, MuSchG), pregnant and nursing students are entitled to a six-week period of protection before and at least eight weeks after birth.On 01.01.2018, the revised Maternity Protection Act (MuSchG) came into force with comprehensive changes. Similar to female employees, female students are accordingly required to report their pregnancy to the university (§14). The first contact is the family office of BTU Cottbus Senftenberg. Further information and the procedure at the BTU Cottbus Senftenberg can also be found in the information sheet - Pregnancy during studies . I suffer from examination anxiety. What can I do about this? The Central Student Guidance and Counselling of the BTU Cottbus-Senftenberg and the Studierendenwerk Ost:Brandenburg offers counselling to students. They can talk openly about their difficulties with a psychologist. Appointments are essential! How is a psychological counselling? Video for psychological counselling from CampusTV"
+  },
+  {
+    "section": "General Questions",
+    "question": "How many times can I fail a class? Is that possible to give an improvement exam to a course that I already passed?",
+    "answer": "Please check this website .",
+    "source_url": "https://www.b-tu.de/en/artificial-intelligence-ms/faq",
+    "linked_urls": [
+      "https://www.b-tu.de/en/study/during-studies/study-organization/examinations/academic-work"
+    ],
+    "linked_content": "How is my final grade for modules calculated? The academic expectations of students are outlined in each module description. The person responsible for the module is responsible for the contents in the module description and for calculating the final grades for the module. The module descriptions for all modules can be found at Info-Portal: Teaching > Modules . When and how do I find out what grade I received? According to the General Examination and Study Regulations for bachelors and master’s programmes written examinations should be graded within four weeks after the examination took place. The results of oral examinations should be announced immediately after the examination is completed. The Online-Portal provides every student with access to his/her transcript of records, which includes all recorded grades for completed modules. According to the General Examination and Study Regulations, results of a partial performance in CA should be released before the next partial performance is due. I would like to see my graded work. What do I need to do? According to the General Examination and Study Regulations for bachelors and master’s programmes you may file a request with your examiner to see your graded work within four weeks after the grades have been made known. Some study areas/chairs offer opportunities to view graded work without the need to file an application for an appointment."
+  },
+  {
+    "section": "General Questions",
+    "question": "What is a “Urlaubsemester?” Am I eligible for that? If yes, is there any deadline to apply for a Urlaubsemester?",
+    "answer": "Information about \"Urlaubsemester\" can be found in this website .",
+    "source_url": "https://www.b-tu.de/en/artificial-intelligence-ms/faq",
+    "linked_urls": [
+      "https://www.b-tu.de/en/study/during-studies/study-organization/formalities/leave-of-absence"
+    ],
+    "linked_content": "Video tutorial Submitting a leave of absence application The rules in force for leaves of absence can be found in the Enrolment Rules of BTU Cottbus-Senftenberg. How and when do I file for a semester on leave and for what reason? You may take a leave of absence for a semester. Possible reasons for the leave of absence may be: semester abroad, internship, maternity leave, etc. (more info in the Enrolment Rules of BTU Cottbus). The leave of absence must be applied for online during the re-registration period in the myBTU-Portal (under Service > Applications > Leave of Absence ); the relevant evidence (for example, medical certificate, birth certificate, internship contract) must be uploaded along with the application. You can view the processing status of your online application at any time in the myBTU-Portal . After examining the application and reaching a decision, you will be informed by email. You will receive a notification of the approval or rejection of your application which will be made available to you to print (PDF file) on the myBTU-Portal under My Studies > Study Service > Notices/Certificates . Please download this as soon as possible and keep it in a safe place for future inquiries. If approved, the leave of absence will also be listed on the certificate of enrolment. Important reasons for a leave of absence are: a long-lasting illness of the student, under which a proper study is not possible, the performance of a service in corresponding application of § 9 Para. 1 No. 1 to 5 of the University Admission Ordinance - HZV from the second semester onwards, the care of close relatives of the students, use of the protection periods according to the Maternity Protection Act and parental leave according to § 15 para. 2 sentence 4 BbgHG, the periods of time prescribed in the regulations for the study programs for study visits at other universities and in practice (mobility window) abroad with a duration of at least eight weeks or the longer-term absence from the place of study due to study-related internships, work experience or comparable activities in Germany with a duration of at least eight weeks. Do I have to pay the semester fee even if I take a leave of absence? Some reasons for a leave of absence lead to a reduction in the semester fee. You can find out the cost of your semester fee in your fee notification in the myBTU-Portal after the online application has been approved. If you already paid the semester fee before you submitted the online application for a leave of absence, and the reason for your leave of absence resulted in a reduction of your semester fee, the excess amount will be listed for you as a credit in the myBTU-Portal . Amounts greater than 5 euros will be officially reimbursed. For amounts of less than 5 euros, you must submit an application for the reimbursement of credit via the myBTU-Portal . Certain reasons, such as an internship abroad (Usually internships in Germany do not count), may qualify you to apply for an exemption from the fee imposed upon students by the student services organisation (Studierendenwerk) for the time you are on leave. The application for exemption from/reimbursement of the Studierendenwerk fee must be sent directly to the Studierendenwerk:Ost (Brandenburg) ( service(at)swffo.de ). May I put off taking examinations while I am on leave? The right to register for modules and attend courses is suspended for the duration of the leave of absence. Repeat examinations in modules with a final module examination can be taken."
+  }
+]
