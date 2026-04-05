@@ -18,6 +18,7 @@ RUN pip3 install --upgrade pip
 RUN pip3 install -r /requirements.docker.txt
 
 COPY ./apps /home/apps/
+COPY ./btu_knowledge /home/btu_knowledge/
 COPY ./wait-for.sh /home/
 COPY ./docker_env.sh /home/
 

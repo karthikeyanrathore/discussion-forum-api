@@ -30,6 +30,8 @@ services:
       # - JWT_SECRET_KEY=jta99001
       - POSTGRES_DB_HOST=discuss-forum-db
       - TESTING=1
+      - VOYAGE_API_KEY=${VOYAGE_API_KEY}
+      - ANTHROPIC_API_KEY=${ANTHROPIC_API_KEY}
     depends_on:
       - discuss-forum-db
     # https://docs.docker.com/config/containers/start-containers-automatically/#use-a-restart-policy

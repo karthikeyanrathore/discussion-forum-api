@@ -54,7 +54,7 @@ MANUAL_PATCHES = {
     }
 }
 BASE_URL = "https://www.b-tu.de"
-OUTPUT_PATH = Path("btu_knowledge/data/faq_general.json")
+OUTPUT_PATH = Path("data/processed/btu/faq_general.json")
 
 HEADERS = {
     "User-Agent": (
@@ -158,16 +158,7 @@ def extract_faq(soup: BeautifulSoup) -> list[dict]:
                         time.sleep(0.5)  # be polite to the server
                 linked_content = " ".join(scraped)
 
-            results.append({
-                "section": section,
-                "question": question,
-                "answer": answer,
-                "source_url": FAQ_URL,
-                "linked_urls": linked_urls,
-                "linked_content": linked_content,
-            })
-
-            # Apply manual patch if this question is known to be empty from the server
+            # Apply manual patch BEFORE appending if answer is empty
             if not answer and not linked_content and question in MANUAL_PATCHES:
                 patch = MANUAL_PATCHES[question]
                 answer = patch.get("answer", "")
@@ -177,6 +168,15 @@ def extract_faq(soup: BeautifulSoup) -> list[dict]:
                 has_content = bool(answer or linked_content)
                 status = "✓" if has_content else "⚠ empty"
                 print(f"  {status} [{section}] {question[:65]}...")
+
+            results.append({
+                "section": section,
+                "question": question,
+                "answer": answer,
+                "source_url": FAQ_URL,
+                "linked_urls": linked_urls,
+                "linked_content": linked_content,
+            })
 
     return results
 

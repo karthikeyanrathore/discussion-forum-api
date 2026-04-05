@@ -193,3 +193,10 @@ pyrightconfig.json
 # End of https://www.toptal.com/developers/gitignore/api/python,linux
 data/raw/
 data/processed/
+btu_knowledge/data/raw/
+debug_structure.py
+
+.env.sh
+docker_env.sh
+.envbtu_knowledge/vectorstore/
+docker_env.sh

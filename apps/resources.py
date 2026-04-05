@@ -1,4 +1,5 @@
 from flask_restful import Resource
+from apps.knowledge import answer_question
 from flask import g, jsonify, make_response, request
 import apps.models as models
 import jwt
@@ -330,3 +331,21 @@ class ReplyComment(Resource):
         g.db.session.add(reply_m)
         g.db.session.commit()
         return {"message": "added reply to comment."}
+
+class AskBot(Resource):
+    def post(self):
+        json_data = request.get_json()
+        if not json_data or "question" not in json_data:
+            return response(400, "Please provide a 'question' field.")
+        
+        question = json_data["question"].strip()
+        if not question:
+            return response(400, "Question cannot be empty.")
+        
+        result = answer_question(question)
+        return response(200, {
+            "question":    question,
+            "answer":      result["answer"],
+            "sources":     result["sources"],
+            "chunks_used": result["chunks_used"],
+        })
