@@ -19,7 +19,7 @@ CHUNKS_PATH      = Path("btu_knowledge/data/chunks.json")
 CHROMA_PATH      = Path("btu_knowledge/vectorstore")
 COLLECTION_NAME  = "btu_faq"
 VOYAGE_MODEL     = "voyage-3"          # Voyage AI embedding model
-BATCH_SIZE       = 64                  # Voyage AI max batch size
+BATCH_SIZE       = 2   # Free tier: 3 RPM, use small batches                  # Voyage AI max batch size
 
 # ── Main ──────────────────────────────────────────────────────────────────────
 
@@ -55,12 +55,19 @@ def main():
     ids        = [c["chunk_id"] for c in chunks]
     metadatas  = [c["metadata"] for c in chunks]
 
+    import time
     all_embeddings = []
+    total_batches = (len(texts) + BATCH_SIZE - 1) // BATCH_SIZE
     for i in range(0, len(texts), BATCH_SIZE):
-        batch = texts[i : i + BATCH_SIZE]
-        print(f"  Embedding batch {i // BATCH_SIZE + 1} ({len(batch)} chunks)...")
+        batch     = texts[i : i + BATCH_SIZE]
+        batch_num = i // BATCH_SIZE + 1
+        print(f"  Embedding batch {batch_num}/{total_batches} ({len(batch)} chunks)...")
         result = vo.embed(batch, model=VOYAGE_MODEL, input_type="document")
         all_embeddings.extend(result.embeddings)
+        # Respect free tier rate limit (3 RPM) — skip sleep on last batch
+        if i + BATCH_SIZE < len(texts):
+            print(f"  (waiting 20s for rate limit...)")
+            time.sleep(20)
 
     # Upsert into ChromaDB
     collection.upsert(

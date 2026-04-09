@@ -1,35 +1,23 @@
 """
 01_scrape.py
 Scrapes the BTU AI MSc FAQ page and all linked pages.
-Saves structured Q&A data to data/processed/btu/faq_general.json
+Saves structured Q&A data to btu_knowledge/data/faq_general.json
 
-BTU page uses TYPO3 accordion structure:
-  <h2>Section Title</h2>
-  <div class="accordion-item">
-      <a class="accordion-title" href="#c395283">Question text</a>
-      <div class="accordion-content" id="c395283">
-          <div class="ce-bodytext">
-              ...answer content...
-          </div>
-      </div>
-  </div>
-
-The trick: match anchor href="#cXXX" to div id="cXXX" to get the answer.
+Key fix: BTU pages wrap real content between
+<!--TYPO3SEARCH_begin--> and <!--TYPO3SEARCH_end-->
+Using this marker gives clean content without nav/header noise.
 """
 
 import json
 import time
 import requests
-from bs4 import BeautifulSoup
+from bs4 import BeautifulSoup, Comment
 from pathlib import Path
 
 # ── Config ────────────────────────────────────────────────────────────────────
 
 FAQ_URL = "https://www.b-tu.de/en/artificial-intelligence-ms/faq"
 
-# BTU serves the first accordion item with an empty accordion-content div
-# (likely a server-side bug with the pre-expanded item). We patch it manually.
-# Content verified from the raw page source on 2026-04-04.
 MANUAL_PATCHES = {
     "What are the admission requirements for the Artificial Intelligence study programme?": {
         "answer": (
@@ -53,14 +41,10 @@ MANUAL_PATCHES = {
         ]
     }
 }
-BASE_URL = "https://www.b-tu.de"
-OUTPUT_PATH = Path("data/processed/btu/faq_general.json")
 
-HEADERS = {
-    "User-Agent": (
-        "Mozilla/5.0 (compatible; BTU-RAG-Bot/1.0; research project)"
-    )
-}
+BASE_URL    = "https://www.b-tu.de"
+OUTPUT_PATH = Path("btu_knowledge/data/faq_general.json")
+HEADERS     = {"User-Agent": "Mozilla/5.0 (compatible; BTU-RAG-Bot/1.0; research project)"}
 
 # ── Helpers ───────────────────────────────────────────────────────────────────
 
@@ -74,28 +58,57 @@ def fetch_page(url: str) -> BeautifulSoup | None:
         return None
 
 
+def extract_typo3_content(soup: BeautifulSoup) -> str:
+    """
+    Extract content between <!--TYPO3SEARCH_begin--> and <!--TYPO3SEARCH_end-->.
+    This is the cleanest way to get only the main page content on BTU pages,
+    skipping all navigation, headers, footers and sidebars.
+    """
+    begin_comment = None
+    end_comment   = None
+
+    for element in soup.find_all(string=lambda text: isinstance(text, Comment)):
+        if "TYPO3SEARCH_begin" in element:
+            begin_comment = element
+        elif "TYPO3SEARCH_end" in element:
+            end_comment = element
+
+    if not begin_comment or not end_comment:
+        # Fallback to common content containers
+        content = (
+            soup.find("div", class_="user-content")
+            or soup.find("div", class_="ce-bodytext")
+            or soup.find("main")
+        )
+        if not content:
+            return ""
+        for tag in content.find_all(["nav", "footer", "header", "script", "style"]):
+            tag.decompose()
+        return " ".join(content.get_text(separator=" ", strip=True).split())
+
+    # Walk siblings between the two comments and collect text
+    content_parts = []
+    current = begin_comment.next_sibling
+
+    while current and current != end_comment:
+        if hasattr(current, "find_all"):
+            for tag in current.find_all(["script", "style"]):
+                tag.decompose()
+            text = current.get_text(separator=" ", strip=True)
+            if text:
+                content_parts.append(text)
+        current = current.next_sibling
+
+    return " ".join(" ".join(content_parts).split())
+
+
 def scrape_linked_page(url: str) -> str:
-    """Scrape main content text from a linked BTU page."""
+    """Scrape main content from a linked BTU page using TYPO3SEARCH markers."""
     print(f"    → Following link: {url}")
     soup = fetch_page(url)
     if not soup:
         return ""
-
-    # Find the TYPO3 bodytext content area
-    content = (
-        soup.find("div", class_="ce-bodytext")
-        or soup.find("div", class_="user-content")
-        or soup.find("main")
-        or soup.find("article")
-    )
-    if not content:
-        return ""
-
-    for tag in content.find_all(["nav", "footer", "header", "script", "style"]):
-        tag.decompose()
-
-    text = content.get_text(separator=" ", strip=True)
-    return " ".join(text.split())
+    return extract_typo3_content(soup)
 
 
 # ── Main extraction ───────────────────────────────────────────────────────────
@@ -103,34 +116,27 @@ def scrape_linked_page(url: str) -> str:
 def extract_faq(soup: BeautifulSoup) -> list[dict]:
     results = []
 
-    # Each FAQ section is a btu_foundation_accordion_container
     accordion_containers = soup.find_all(
         "div", class_="frame-type-btu_foundation_accordion_container"
     )
 
     for container in accordion_containers:
-        # Get section name from <h2> inside the container's <header>
-        header = container.find("header")
+        header  = container.find("header")
         section = header.find("h2").get_text(strip=True) if header else "General"
-
-        # Each Q&A is an accordion-item
-        items = container.find_all("div", class_="accordion-item")
+        items   = container.find_all("div", class_="accordion-item")
 
         for item in items:
-            # Question = text of the accordion-title anchor
             title_anchor = item.find("a", class_="accordion-title")
             if not title_anchor:
                 continue
             question = title_anchor.get_text(strip=True)
 
-            # Answer = content inside accordion-content div
             content_div = item.find("div", class_="accordion-content")
             if not content_div:
                 continue
 
-            # Get all text and links from the bodytext area
             bodytext = content_div.find("div", class_="ce-bodytext")
-            target = bodytext if bodytext else content_div
+            target   = bodytext if bodytext else content_div
 
             # Collect linked URLs
             linked_urls = []
@@ -141,40 +147,36 @@ def extract_faq(soup: BeautifulSoup) -> list[dict]:
                     if full_url not in linked_urls:
                         linked_urls.append(full_url)
 
-            answer = target.get_text(separator=" ", strip=True)
-            answer = " ".join(answer.split())
+            answer = " ".join(target.get_text(separator=" ", strip=True).split())
 
-            # If stub answer (just "Please check this website") → scrape linked pages
+            # Scrape ALL linked BTU pages (not just stubs)
             linked_content = ""
-            is_stub = len(answer) < 100 and linked_urls
-
-            if is_stub:
+            if linked_urls:
                 scraped = []
                 for url in linked_urls:
-                    if "b-tu.de" in url:
+                    if "b-tu.de" in url and not url.endswith(".pdf"):
                         text = scrape_linked_page(url)
                         if text:
                             scraped.append(text)
-                        time.sleep(0.5)  # be polite to the server
+                        time.sleep(0.5)
                 linked_content = " ".join(scraped)
 
-            # Apply manual patch BEFORE appending if answer is empty
+            # Apply manual patch before appending if answer is empty
             if not answer and not linked_content and question in MANUAL_PATCHES:
-                patch = MANUAL_PATCHES[question]
-                answer = patch.get("answer", "")
-                linked_urls = patch.get("linked_urls", linked_urls)
+                patch        = MANUAL_PATCHES[question]
+                answer       = patch.get("answer", "")
+                linked_urls  = patch.get("linked_urls", linked_urls)
                 print(f"  ✓ [{section}] {question[:65]}... (patched)")
             else:
-                has_content = bool(answer or linked_content)
-                status = "✓" if has_content else "⚠ empty"
+                status = "✓" if (answer or linked_content) else "⚠ empty"
                 print(f"  {status} [{section}] {question[:65]}...")
 
             results.append({
-                "section": section,
-                "question": question,
-                "answer": answer,
-                "source_url": FAQ_URL,
-                "linked_urls": linked_urls,
+                "section":        section,
+                "question":       question,
+                "answer":         answer,
+                "source_url":     FAQ_URL,
+                "linked_urls":    linked_urls,
                 "linked_content": linked_content,
             })
 
@@ -191,9 +193,8 @@ def main():
         return
 
     faq_data = extract_faq(soup)
-
     if not faq_data:
-        print("No Q&A pairs extracted. Check the page structure.")
+        print("No Q&A pairs extracted.")
         return
 
     OUTPUT_PATH.parent.mkdir(parents=True, exist_ok=True)
