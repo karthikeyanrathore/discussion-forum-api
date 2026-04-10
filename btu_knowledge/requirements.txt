@@ -1,4 +1,0 @@
-voyageai
-chromadb
-requests
-beautifulsoup4
