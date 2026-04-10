@@ -1,8 +1,0 @@
-Flask-RESTful
-Flask
-PyJWT
-SQLAlchemy
-Flask-SQLAlchemy
-psycopg2-binary
-uwsgi
-uwsgidecorators
