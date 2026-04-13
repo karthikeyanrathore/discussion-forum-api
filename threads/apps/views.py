@@ -9,7 +9,6 @@ from apps.resources import (
     CommentPost,
     LikePost,
     ReplyComment,
-    AskBot,
 )
 
 from flask import Blueprint

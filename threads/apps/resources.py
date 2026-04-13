@@ -1,5 +1,4 @@
 from flask_restful import Resource
-from apps.knowledge import answer_question
 from flask import g, jsonify, make_response, request
 import apps.models as models
 import jwt
