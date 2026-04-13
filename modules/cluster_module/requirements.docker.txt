@@ -6,7 +6,3 @@ Flask-SQLAlchemy
 psycopg2-binary
 uwsgi
 uwsgidecorators
-Flask-Cors
-anthropic
-voyageai
-chromadb

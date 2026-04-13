@@ -18,7 +18,6 @@ RUN pip3 install --upgrade pip
 RUN pip3 install -r /requirements.docker.txt
 
 COPY ./apps /home/apps/
-COPY ./btu_knowledge /home/btu_knowledge/
 COPY ./wait-for.sh /home/
 COPY ./docker_env.sh /home/
 
@@ -27,10 +26,7 @@ RUN chmod 777 docker_env.sh
 COPY wsgi.py /home/
 COPY uwsgi.ini /uwsgi.ini
 
-CMD sh ./wait-for.sh discuss-forum-db:5432 -- echo "postgres is up!" && \
+CMD sh ./wait-for.sh notes-db:5432 -- echo "postgres is up!" && \
     . ./docker_env.sh && uwsgi --ini /uwsgi.ini
-
-
-
 
 

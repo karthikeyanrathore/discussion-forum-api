@@ -1,13 +1,11 @@
----
 version: "3.7"
 
 services:
 
-  discuss-forum-db:
-    container_name: discuss-forum-db
+  notes-db:
+    container_name: notes-db
     image: postgres:12.3-alpine
     restart: unless-stopped
-    hostname: discuss-forum-db
     environment:
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=postgres
@@ -15,32 +13,32 @@ services:
     volumes:
       # Persist data that is stored in db after
       # container is shutdown.
-      - discuss-forum-db_data:/var/lib/postgresql/data/
+      - notes-db_data:/var/lib/postgresql/data/
     networks:
-      - discuss-forum-net
-    ports:
-      - "5432:5432"
-  
-  discuss-forum-api:
-    hostname: discuss-forum-api
+      - notes-net
+    # ports:
+    #   - "5432:5432"
+
+  notes-api-prod:
+    hostname: notes-api
+    profiles: [production]
     build:
       context: .
       dockerfile: Dockerfile
     environment:
       # - JWT_SECRET_KEY=jta99001
-      - POSTGRES_DB_HOST=discuss-forum-db
-      - TESTING=1
-      - VOYAGE_API_KEY=${VOYAGE_API_KEY}
-      - ANTHROPIC_API_KEY=${ANTHROPIC_API_KEY}
+      - POSTGRES_DB_HOST=notes-db
     depends_on:
-      - discuss-forum-db
+      - notes-db
     # https://docs.docker.com/config/containers/start-containers-automatically/#use-a-restart-policy
     restart: unless-stopped
     networks:
-      - discuss-forum-net
+      - notes-net
+    deploy:
+      mode: replicated
+      replicas: 6
     ports:
-      - "8000:8000"
-    
+      - "8000-9007:8000"
 
   nginx-performer:
     container_name: nginx-performer
@@ -49,20 +47,15 @@ services:
     volumes:
       - ./nginx/nginx.conf:/etc/nginx/nginx.conf
     networks:
-      - discuss-forum-net
+      - notes-net
     ports:
       - "80:80"
     depends_on:
-      - discuss-forum-db
-      - discuss-forum-api
+      - notes-db
 
 
 volumes:
-  discuss-forum-db_data:
+  notes-db_data:
 
 networks:
-  discuss-forum-net:
-
-
-# clean up
-# docker-compose down -v --remove-orphans; docker-compose -f  docker-compose-offline.yml down -v --remove-orphans;
+  notes-net:

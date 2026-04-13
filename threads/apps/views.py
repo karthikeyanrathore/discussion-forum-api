@@ -8,7 +8,7 @@ from apps.resources import (
     DiscussionPost,
     CommentPost,
     LikePost,
-    ReplyComment
+    ReplyComment,
 )
 
 from flask import Blueprint
