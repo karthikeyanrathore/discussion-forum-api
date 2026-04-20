@@ -1,0 +1,5 @@
+# ICS calendar files — keep private, never commit
+*.ics
+
+# Parsed calendar data — contains personal schedule info
+data/*.json
