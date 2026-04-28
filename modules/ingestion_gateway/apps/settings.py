@@ -1,15 +1,14 @@
-import sqlalchemy
 import os
 
-POSTGRES_DB_HOST = os.environ.get("POSTGRES_DB_HOST", None)
+class Setting:
+    FLASK_HOST = os.getenv('FLASK_HOST', '0.0.0.0')
+    FLASK_PORT = int(os.getenv('FLASK_PORT', 8080))
+    FLASK_DEBUG = os.getenv('FLASK_DEBUG', 'false').lower() == 'true'
+    
+    MAX_CONTENT_LENGTH = 10 * 1024 * 1024  # 10MB
 
-SQLALCHEMY_DATABASE_URI = sqlalchemy.engine.url.URL.create(
-    drivername="postgresql",
-    username="postgres",
-    password="postgres",
-    host=POSTGRES_DB_HOST,
-    port="5432",
-    database="postgres",
-)
+    RABBITMQ_URL = os.getenv("RABBITMQ_URL", "amqp://guest:guest@localhost:5672/")
+    RABBITMQ_EXCHANGE = os.getenv("RABBITMQ_EXCHANGE", "ingest.events")
+    RABBITMQ_EXCHANGE_TYPE = os.getenv("RABBITMQ_EXCHANGE_TYPE", "topic")
 
-JWT_SECRET_KEY = os.environ.get("JWT_SECRET_KEY", None)
+    DEBUG = 1
